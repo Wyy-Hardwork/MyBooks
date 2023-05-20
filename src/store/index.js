@@ -1,3 +1,4 @@
+import { number } from 'echarts'
 import {defineStore} from 'pinia'
 
 //name必须唯一,pinia会把容器挂载到根容器
@@ -11,11 +12,13 @@ export const useStore = defineStore('MyFirstPinia',{
             bookUrl:'',
             novelUrl:'',
             search:'',
-            read:'',
             isLogin:true,
             id:'',
             uid:'',
             tableData1:[],
+            chapters:[],
+            cindex:number,
+            cname:'',
         }
     },
     persist:true,//持久化插件对数据进行localStorage缓存

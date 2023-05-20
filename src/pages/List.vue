@@ -89,16 +89,20 @@
           <el-tag style="margin-left: 175px; margin-top: 10px">京东有售</el-tag>
         </div>
       </div>
-    </div>
+
+   <div>
     <el-pagination
+      class="page-list"
       background
       layout="prev, pager, next"
       :total="pages"
-      class="page-list"
       @current-change="Currentpage"
       hide-on-single-page
     >
     </el-pagination>
+  </div>
+
+    </div>
   </div>
 </template>
 
@@ -276,6 +280,18 @@ ul {
   background-size: cover;
   width: 100%;
   position: fixed;
+}
+@media (max-width: 736px) {
+  .bg-list{
+      background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 10%,
+      rgba(255, 255, 255, 1) 90%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    url("../../public/imgs/bg4.jpg");
+  }  
 }
 
 /* 中央布局 */

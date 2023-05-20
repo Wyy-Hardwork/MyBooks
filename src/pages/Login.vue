@@ -108,7 +108,7 @@ export default {
         mainStore.id = result.data[0]
         mainStore.uid = result.data[1]
         this.$message.success('登录成功')
-        this.$router.push('/admin')
+        this.$router.push('/favorites')
       }
       else{
         this.$message.error('账号或密码错误,请重试')

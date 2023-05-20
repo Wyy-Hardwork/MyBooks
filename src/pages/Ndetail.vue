@@ -26,7 +26,7 @@
 
 <div style="font-size:17px;color: #4c4c4c;padding-left: 7px;" class="el-icon-time">最新章节</div>
   <div class="cbox1-ndetail">
-    <router-link to="/read" v-for="(item,index) in chapter" :key="index"><div @click="goRead(item)" class="chapter-ndetail">{{item.name}}</div></router-link>
+    <router-link to="/read" v-for="(item,index) in chapter" :key="index"><div @click="goRead(item,catalog[catalog.length - 1],catalog[catalog.length - 1].length - index -1)" class="chapter-ndetail">{{item.name}}</div></router-link>
   </div>
   <div class="bbox-ndetail">
   <el-button v-if="favorites == false" @click="favorite()" class="b-ndetai el-icon-star-off">加入收藏</el-button>
@@ -36,19 +36,20 @@
         <el-divider><i class="el-icon-notebook-2"></i></el-divider>
         <div class="title1-ndetail el-icon-tickets">内容简介</div>
         <div class="intro-ndetail">
-          <div v-for="item in intro" :key="item" v-html="item"></div>
+          <div class="em-ndetail" v-for="item in intro" :key="item" v-html="item"></div>
         </div>
         <div class="title1-ndetail el-icon-document">图书目录</div>
         <div class="intro-ndetail">
         
-          <div v-for="(item,index) in logName" :key="index">
+          <div v-for="(item,index) in logName" :key="index" @click="cname(item)">
             <div  class="volume-ndetail">
             {{item}}
             </div>
+
 <div class="cbox2-ndetail">
             <router-link to="/read">
-            <div @click="goRead(item1)" class="chapter1-ndetail" v-for="(item1,index1) in catalog[index]" :key="index1">
-              {{item1.name1}}
+            <div @click="goRead(item1,catalog[index],index1)" class="chapter1-ndetail" v-for="(item1,index1) in catalog[index]" :key="index1">
+              {{item1.names}}
             </div>
             </router-link>
 </div>
@@ -77,7 +78,7 @@ export default {
       intro:[],
       chapter:[],
       logName:[],
-      catalog:[],
+      catalog:[[]],
       favorites:false,
     };
   },
@@ -94,7 +95,7 @@ export default {
       this.logName=[]
       this.catalog=[]//初始化
       let result = await request({
-        url: `/no/${mainStore.novelUrl}`,
+        url: `/no${mainStore.novelUrl}`,
         method: "get",
       });
       if (result.status == 200) {
@@ -125,38 +126,48 @@ export default {
         }
       }
     },
+
     async bookList(){
       let mainStore = useStore();
       let url = mainStore.novelUrl.replace('.html','/catalog')
       let result = await request({
-        url: `/no/${url}`,
+        url: `/no${url}`,
         method: "get"
       });
       if (result.status == 200) {
         let html = result.data;
         let $ = cheerio.load(html, { decodeEntities: false });
-        let length = $(`.volume-list .chapter-list div.volume`).length
-        let indexs = 1
-        for (let i = 0; i < length; i++) {
-        let logName = $(`.volume-list .chapter-list div.volume:nth-of-type(${i+1})`).text()
-        this.logName.push(logName)
+        let allLength = $(`.volume-list .chapter-list`).children().length
+        let chapter = -1
+        let cindex
 
-          let length1 = $(`.volume-list .chapter-list div.volume:nth-of-type(${i+1})`).nextUntil(`.volume-list .chapter-list div.volume:nth-of-type(${i+2})`).length
-          let logout = [];
-          for (let x = 0; x < length1; x++){
-            let name1 = $(`.volume-list .chapter-list li:nth-of-type(${indexs})`).text()
-            let url1 = $(`.volume-list .chapter-list li:nth-of-type(${indexs}) a`).attr('href')
-            indexs++
-            let login = {name1,url1}
-            logout.push(login)
+        for (let i = 0; i < allLength; i++) {
+          let name = $(`.volume-list .chapter-list *`).eq(i*2)
+          if(name.hasClass('volume')){
+            cindex = 0
+            this.logName.push(name.text())
+            chapter++
+            this.catalog[chapter] = new Array()
+          }else{
+            let url = name.find('.col-4 a').attr('href')
+            let names = name.find('.col-4 a').text()
+            let list = {url,names}
+            this.catalog[chapter][cindex] = list
+            cindex++
           }
-          this.catalog.push(logout)
         }
+        
       }
     },
-    async goRead(item){
+    async goRead(item,list,cindex){
     let mainStore = useStore();
-    mainStore.read = item.end || item.url1
+    let chapters = list.map(item => item.url)
+    mainStore.chapters = chapters
+    mainStore.cindex = cindex
+    },
+    cname(item){
+      let mainStore = useStore()
+      mainStore.cname = item
     },
       async favorite(){
       let mainStore = useStore()
@@ -256,6 +267,23 @@ export default {
   background-size: cover;
   width: 100%;
   position: fixed;
+}
+@media (max-width: 736px) {
+  .bg-ndetail{
+      background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 3%,
+      rgba(255, 255, 255, 1) 97%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    url("../../public/imgs/bg7.jpg");
+  }  
+}
+/* 介绍里的别名 */
+.em-ndetail > em{
+  font-style: normal !important;
+  color: #409eff;
 }
 /* 中央布局 */
 .middle-ndetail {

@@ -12,8 +12,9 @@
             active-text-color="#dfcdbd"
             router
           >
+            <el-menu-item index="echart" >数据可视化</el-menu-item>
             <el-menu-item index="books" >图书主页</el-menu-item>
-            <el-menu-item index="list" >图书浏览</el-menu-item>
+            <el-menu-item index="list" >书籍浏览</el-menu-item>
             <el-menu-item index="chapter" >在线阅读</el-menu-item>
           </el-menu>
 
@@ -37,7 +38,7 @@
 
         <div class="avatar-navbar" v-if="id !==''">  
           <div style="font-size:18px;margin-bottom:10px">欢迎!<span style="color:#409eff">{{id}}</span></div> 
-            <router-link to="/admin"><div class="choice-navbar">个人空间</div></router-link>
+            <router-link to="/favorites"><div class="choice-navbar">个人空间</div></router-link>
             <router-link to="/books"><div class="choice1-navbar" @click="quit('')">退出登录</div></router-link>
             <div class="round-navbar"></div>
             <div class="round-navbar1"></div>
@@ -53,7 +54,7 @@
           <el-button
             slot="append"
             icon="el-icon-search"
-            @click="search()"
+            @click="debounce()"
           ></el-button>
         </el-input>
         </div>
@@ -73,6 +74,7 @@ export default {
     return {
       input: "",
       activeIndex: this.$route.name,
+      timer:null,
     };
   },
   methods: {
@@ -122,6 +124,12 @@ export default {
     async novelSearch(){
       let mainStore = useStore()
       mainStore.novelSearch = this.input
+    },
+    debounce(){
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.search()
+      }, 300);
     }
   },
   watch: {

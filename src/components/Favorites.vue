@@ -127,7 +127,7 @@ mounted(){
 /* 大盒子 */
 .box-fa{
   display: inline-block;
-  width: calc(100% - 220px);
+  width: calc(100% - 13vw);
   margin-left: 1%;
 }
 /* 每个盒子的样式 */
@@ -150,6 +150,14 @@ mounted(){
   font-size: 30px;
   color: #606266;
   padding: 1%;
+}
+
+@media (max-width: 736px) {
+  .box-fa{
+  display: inline-block;
+  width: 71vw;
+  margin-left: 18px;
+}
 }
 
 #a-fa{

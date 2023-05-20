@@ -485,6 +485,18 @@ export default {
   width: 100%;
   position: fixed;
 }
+@media (max-width: 736px) {
+  .bg-books{
+      background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 5%,
+      rgba(255, 255, 255, 1) 95%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    url("../../public/imgs/bg1.jpg");
+  }  
+}
 
 /* tab栏 */
 .tab-books {
@@ -526,7 +538,7 @@ export default {
 /* 随机推荐li样式 */
 .list-li-books {
   overflow: hidden;
-  padding-left: 14px;
+  padding-left: 12px;
   width: 152px;
   height: 270px;
   display: inline-block;

@@ -3,8 +3,8 @@
     <div style="font-size: 25px; color: #4c4c4c;padding:20px" class="el-icon-edit-outline">
       书籍编辑
     </div>
-
-    <el-table :data="tableData" border class="table-edit">
+<div class="table-edit">
+    <el-table :data="tableData" border class="border-edit">
       <el-table-column prop="id" label="ID" width="90" align="center">
         <template slot-scope="scope">
           <!-- <el-input type="text" v-model="scope.row.id" v-show="scope.row.iseditor" /> -->
@@ -54,6 +54,7 @@
         </template>
       </el-table-column>        
     </el-table>
+    </div>
   </div>
 </template>
 <script>
@@ -131,13 +132,25 @@ export default {
 };
 </script>
 <style>
+/* 标题和table大盒子 */
 .st-table {
   display: inline-block;
-  width: calc(100% - 220px);
+  width: calc(100% - 12vw);
   margin-left: 1%;
 }
 /* table盒子 */
 .table-edit{
+ width: calc(100% - 1vw);
+ margin-left: 1%;
+}
+/* 改table样式找我 */
+.border-edit{
  border-radius: 5px;
+}
+@media (max-width: 736px) {
+.st-table {
+  width: calc(100% - 94px);
+  margin-left: 84px;
+}
 }
 </style>

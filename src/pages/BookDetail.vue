@@ -201,6 +201,18 @@ export default {
   width: 100%;
   position: fixed;
 }
+@media (max-width: 736px) {
+  .bg-detail{
+      background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 3%,
+      rgba(255, 255, 255, 1) 97%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    url("../../public/imgs/bg3.jpg");
+  }  
+}
 /* 中央布局 */
 .middle-detail {
   width: 1200px;

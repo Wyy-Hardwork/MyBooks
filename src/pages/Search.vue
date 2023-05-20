@@ -282,6 +282,18 @@ export default {
   width: 100%;
   position: fixed;
 }
+@media (max-width: 736px) {
+  .bg-search{
+      background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 10%,
+      rgba(255, 255, 255, 1) 90%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    url("../../public/imgs/bg6.jpg");
+  }  
+}
 /* 中央布局 */
 .middle-search {
   width: 1200px;
@@ -520,7 +532,15 @@ export default {
   max-height: 72px;
 }
 /* 强调字样式 */
-em{
+.title-search > em{
+  font-style: normal !important;
+  color: #409eff;
+}
+.con1-search > em{
+  font-style: normal !important;
+  color: #409eff;
+}
+.con2-search > em{
   font-style: normal !important;
   color: #409eff;
 }

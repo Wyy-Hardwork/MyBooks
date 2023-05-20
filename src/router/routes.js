@@ -1,82 +1,69 @@
 import Chapter from '../pages/Chapter.vue'
 import Login from '../pages/Login.vue'
-import Books from '../pages/Books.vue'
-import Admin from '../pages/Admin.vue'
-import BookDetail from '@/pages/BookDetail'
-import List from '@/pages/List'
-import Search from '@/pages/Search'
-import Ndetail from '@/pages/Ndetail'
-import Read from '@/pages/Read'
-import Echart from '@/components/Echart'
-import Edit from '@/components/Edit'
-import Favorites from '@/components/Favorites'
 export default 
 [   
     {
         path:'/',
-        redirect:'/books'
+        redirect:'/echart'
     },
     {
         path:'/admin',
-        component:Admin,
-        children:[{
-            path:'/',
-            name:'echart',
-            component:Echart
-        },
+        component:()=>import('../pages/Admin.vue'),
+        children:[
         {
             path:'/edit',
             name:'edit',
-            component:Edit
+            component:()=>import('../components/Edit.vue')
         },
         {
             path:'/favorites',
             name:'favorites',
-            component:Favorites
+            component:()=>import('../components/Favorites.vue')
         },]
     },
     {
         path:'/list',
         name:'list',
-        component:List        
+        component:()=>import('../pages/List.vue')        
+    },
+    {
+        path:'/echart',
+        name:'echart',
+        component:()=>import('../pages/Echart.vue')          
     },
     {
         path:'/read',
         name:'read',
-        component:Read        
+        component:()=>import('../pages/Read.vue')        
     },
     {
         path:'/ndetail',
         name:'ndetail',
-        component:Ndetail        
+        component:()=>import('../pages/Ndetail.vue')        
     },
     {
         path:'/search',
         name:'search',
-        component:Search        
+        component:()=>import('../pages/Search.vue')        
     },
     {
         path:'/bookdetail',
         name:'bookdetail',
-        component:BookDetail        
+        component:()=>import('../pages/BookDetail.vue')        
     },
     {
         path:'/books',
         name:'books',
-        component:Books
+        component:()=>import('../pages/Books.vue')
     },
     {
         path:'/chapter',
         name:'chapter',
-        component:Chapter
+        component:Chapter   
     },
     {
         path:'/login',
         name:'login',
         component:Login
-    },
-    {
-        path:'/',
-        redirect:'/chapter'
     }
 ]

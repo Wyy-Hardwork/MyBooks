@@ -7,23 +7,18 @@
         <label for="menu-btn"><i class="el-icon-arrow-left"></i></label>
         <!-- 展示与隐藏侧边栏 结束-->
         <div class="menu">
-          <router-link to="/admin">
-          <div class="menu-item-ad" @click="choice = 1" :class="{itemonAd : activeIndex == 'echart'}">
-              <i class="el-icon-s-marketing"></i>
-              <span>书籍可视化图表</span>
-          </div>
-          </router-link>
-          <router-link to="/edit">
-          <div class="menu-item-ad" @click="choice = 2" :class="{itemonAd : activeIndex == 'edit'}">
-              <i class="el-icon-edit-outline"></i>
-              <span>书籍编辑</span>
-          </div>
-          </router-link>
           <router-link to="/favorites">
-          <div class="menu-item-ad" @click="choice = 3" :class="{itemonAd : activeIndex == 'favorites'}">
+          <div class="menu-item-ad" @click="choice = 1" :class="{itemonAd : activeIndex == 'favorites'}">
               <i class="el-icon-star-on"></i>
               <span>个人收藏</span>
           </div>  
+          </router-link>
+
+          <router-link to="/edit">
+          <div v-if="permission == 1" class="menu-item-ad" @click="choice = 2" :class="{itemonAd : activeIndex == 'edit'}">
+              <i class="el-icon-edit-outline"></i>
+              <span>书籍编辑</span>
+          </div>
           </router-link>
 
         </div>
@@ -35,19 +30,30 @@
 </template>
 
 <script>
+import request from "../api/request";
+import { useStore } from "@/store/index";
 export default {
   components: {},
   data() {
     return {
       activeIndex:'',
-      collapse:false
+      collapse:false,
+      permission:0,
     };
   },
   methods: {
-
+    async permiss(){
+      let mainStore = useStore()
+      let id = mainStore.uid
+      let result = await request.post('/base/permiss',{
+        uid:id
+      })
+      this.permission = result.data[0].permiss
+    }
   },
   mounted() {
     this.activeIndex = this.$route.name
+    this.permiss()
   },
   watch:{
     $route(to) {
@@ -69,6 +75,63 @@ export default {
   display: inline-block;
   height: 100%;
   background: #545c64;
+}
+
+.menu {
+  font-size: 18px;
+  width: 180px;
+  min-height: 100%;
+  cursor: pointer;
+  overflow: hidden;
+  transition: width var(--transition-menu-time);
+  color: var(--font-color-mi);
+}
+
+
+/* 侧边栏大盒子 */
+.menu-box-ad {
+  border-top-color: transparent;
+  letter-spacing: 0.5px;
+  min-height: 100vh;
+  position: relative;
+  text-align: center;
+  background-color: var(--color-menu-bg);
+}
+/* 侧边栏每一项 */
+.menu-item-ad{
+  text-align: center;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 20px;
+  white-space: nowrap;
+  transition-duration: .3s;
+  cursor: pointer;
+  font-size: 14px;
+  color:rgb(247, 242, 238)
+}
+.menu-item-ad:hover{
+  background-color: rgb(67, 74, 80);
+}
+
+@media (max-width: 736px) {
+.left-ad{
+min-width: 84px;
+width: 10vw;
+}
+.menu {
+min-width: 84px;
+width: 10vw;
+}
+.menu-item-ad{
+  height: 50px;
+  line-height: 50px;
+  font-size: 12px;
+  padding: 0 2vw;
+}
+}
+
+.menu-box-ad > input#menu-btn:checked ~ .menu {
+  width: 0;
 }
 
 .leAd{
@@ -101,32 +164,6 @@ export default {
   display: inline-block;
   vertical-align: top;
   position: fixed;
-}
-
-
-/* 侧边栏大盒子 */
-.menu-box-ad {
-  border-top-color: transparent;
-  letter-spacing: 0.5px;
-  min-height: 100vh;
-  position: relative;
-  text-align: center;
-  background-color: var(--color-menu-bg);
-}
-/* 侧边栏每一项 */
-.menu-item-ad{
-  text-align: center;
-  height: 60px;
-  line-height: 60px;
-  padding: 0 20px;
-  white-space: nowrap;
-  transition-duration: .3s;
-  cursor: pointer;
-  font-size: 14px;
-  color:rgb(247, 242, 238)
-}
-.menu-item-ad:hover{
-  background-color: rgb(67, 74, 80);
 }
 /* 激活状态 */
 .itemonAd{
@@ -173,20 +210,6 @@ export default {
 
 .menu-box-ad > input#menu-btn:checked + label > i {
   transform: rotate(180deg);
-}
-
-.menu {
-  font-size: 18px;
-  width: 180px;
-  min-height: 100%;
-  cursor: pointer;
-  overflow: hidden;
-  transition: width var(--transition-menu-time);
-  color: var(--font-color-mi);
-}
-
-.menu-box-ad > input#menu-btn:checked ~ .menu {
-  width: 0;
 }
 
 </style>

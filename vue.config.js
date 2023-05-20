@@ -14,7 +14,7 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       '/base': {
-        target: 'http://127.0.0.1:3000',
+        target: 'http://47.94.80.85:3000',
         changeOrigin: true,//是否跨域
         pathRewrite: {
           '^/base': ''
@@ -31,6 +31,18 @@ module.exports = defineConfig({
         },
         headers: {
           "Referer": "https://www.linovelib.com",
+          "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.51"
+        }
+      },
+      '/pic': {
+        target: 'https://img1.readpai.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/pic': ''
+        },
+        headers: {
+          "Referer": "https://www.linovelib.com",
+          "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.51"
         }
       },
       '/du': {
@@ -48,16 +60,6 @@ module.exports = defineConfig({
         },
         headers: {
           "Referer": "https://www.dushu.com/",
-        }
-      },
-      '/ci': {
-        target: 'https://www.baidu.com/s?wd=',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/ci': ''
-        },
-        header:{
-          "Referer": "https://www.baidu.com",
         }
       },
     },
