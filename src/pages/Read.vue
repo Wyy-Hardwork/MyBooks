@@ -6,12 +6,13 @@
     <div v-html="text" class="text-read"></div>
     <div class="button-read">
       <div class="big-read">
-        <el-button type="info" @click="goRead(nextPage)" v-if="this.nextName !=='下一章'"> {{nextName}}<i class="el-icon-arrow-right"></i> </el-button>
+        <el-button type="info" @click="goRead(nextPage);" v-if="cindex !== maxPage && nextPage !== nextChapter"> {{nextName}}<i class="el-icon-arrow-right"></i> </el-button>
       </div>
       <div class="bu1-read">
         <el-button type="info" v-if="cindex == 0" disabled> 这里是本卷的第一章 </el-button>
         <el-button type="info" @click="prev()" v-if="cindex !== 0"> <i class="el-icon-arrow-left"></i>上一章 </el-button>
         <el-button type="info" @click="back()" v-if="nextName !=='看完了,点我返回目录'"> <i class="el-icon-tickets"></i> 返回目录</el-button>
+        <el-button type="info" @click="back()" v-if="nextName =='看完了,点我返回目录'"> <i class="el-icon-tickets"></i> 结束了，返回吧</el-button>
         <el-button type="info" @click="next()" v-if="cindex !== maxPage"> 下一章<i class="el-icon-arrow-right"></i> </el-button>
         <el-button type="info" v-if="cindex == maxPage" disabled> 已经是本卷最后一章 </el-button>
       </div>
@@ -35,6 +36,7 @@ export default {
     nextName:'',
     isRead:false,//看你是换章节还是长按钮,false换章节，true长按钮显示什么作用什么
     cd:false,//防止长按钮下一章死循环
+    nextChapter:''
     };
   },
   methods: {
@@ -42,123 +44,120 @@ export default {
       if(this.nextName == '看完了,点我返回目录'){
         this.$router.push('ndetail')
         return
-      }else if(this.nextName == '下一章'){
-        
       }
       let mainStore = useStore();
       let url
-      if(this.isRead == false){
+      if(this.isRead == false){//貌似是判断下一页或者下一章,true获取章节链接，false获取下一页
         url = mainStore.chapters[mainStore.cindex]
         this.isRead = true
       }else{
         url = item
       }
       let result = await request({
-        url: `/no${url}`,
+        url: `/nm${url}`, 
         method: "get"
       });
       if (result.status == 200) {
         let html = result.data
         let $ = cheerio.load(html, { decodeEntities: false });
-        let text = $(`#mlfy_main_text`).html()
-        this.nextPage = $(`.mlfy_page a:nth-of-type(5)`).attr('href')
-        let nextName = $(`.mlfy_page a:nth-of-type(5)`).text()
+        let text = $(`#apage`).html()
+        const regex0 = /url_next:'(.*?)'/;//下一页
+        this.nextPage = (html.match(regex0))[1]
+        let nextName = $(`#footlink a:nth-of-type(4)`).text()
         if(nextName.includes('返回')){
           this.nextName = '看完了,点我返回目录'
         }else{
           this.nextName = nextName
         }
-        const regex = /https:\/\/img1\.readpai\.com/g;
+        // https://linovelib-img.moeyy.cn/2/2939/145204/171864.jpg
+        const regex = /(https:\/\/img2\.readpai\.com|https:\/\/linovelib-img\.moeyy\.cn)/g;
         text = text.replace(regex,'/pic')
-        this.text = text.replace
-(/|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||/g,function(match){//replace第二个参数用函数,return值
-          let map = {
-            "":"液",
-            "":"阴",
-            "":"射",
-            "":"肉",
-            "":"裸",
-            "":"舔",
-            "":"穴",
-            "":"呻",
-            "":"胸",
-            "":"乳",
-            "":"脱",
-            "":"私",
-            "":"美",
-            "":"成",
-            "":"交",
-            "":"小",
-            "":"之",
-            "":"后",
-            "":"还",
-            "":"如",
-            "":"地",
-            "":"和",
-            "":"大",
-            "":"家",
-            "":"到",
-            "":"时",
-            "":"这",
-            "":"会",
-            "":"去",
-            "":"里",
-            "":"们",
-            "":"然",
-            "":"多",
-            "":"发",
-            "":"么",
-            "":"事",
-            "":"也",
-            "":"好",
-            "":"以",
-            "":"上",
-            "":"作",
-            "":"于",
-            "":"天",
-            "":"为",
-            "":"心",
-            "":"只",
-            "":"她",
-            "":"样",
-            "":"没",
-            "":"第",
-            "":"对",
-            "":"起",
-            "":"下",
-            "":"看",
-            "":"道",
-            "":"想",
-            "":"要",
-            "":"个",
-            "":"开",
-            "":"来",
-            "":"唇",
-            "":"过",
-            "":"性",
-            "":"当",
-            "":"把",
-            "":"种",
-            "":"自",
-            "":"得",
-            "":"而",
-            "":"出",
-            "":"学",
-            "":"能",
-            "":"都",
-            "":"用",
-            "":"欲",
-            "":"可",
-          };
-          //字典是一种特殊的键值对,学到了
-          return map[match]
-        })
+        text = text.replace(/<h3>.*?<\/h3>/g, '');
+        this.text = text
+// (/|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||/g,function(match){//replace第二个参数用函数,return值
+//           let map = {
+//             "":"液",
+//             "":"阴",
+//             "":"射",
+//             "":"肉",
+//             "":"裸",
+//             "":"舔",
+//             "":"穴",
+//             "":"呻",
+//             "":"胸",
+//             "":"乳",
+//             "":"脱",
+//             "":"私",
+//             "":"美",
+//             "":"成",
+//             "":"交",
+//             "":"小",
+//             "":"之",
+//             "":"后",
+//             "":"还",
+//             "":"如",
+//             "":"地",
+//             "":"和",
+//             "":"大",
+//             "":"家",
+//             "":"到",
+//             "":"时",
+//             "":"这",
+//             "":"会",
+//             "":"去",
+//             "":"里",
+//             "":"们",
+//             "":"然",
+//             "":"多",
+//             "":"发",
+//             "":"么",
+//             "":"事",
+//             "":"也",
+//             "":"好",
+//             "":"以",
+//             "":"上",
+//             "":"作",
+//             "":"于",
+//             "":"天",
+//             "":"为",
+//             "":"心",
+//             "":"只",
+//             "":"她",
+//             "":"样",
+//             "":"没",
+//             "":"第",
+//             "":"对",
+//             "":"起",
+//             "":"下",
+//             "":"看",
+//             "":"道",
+//             "":"想",
+//             "":"要",
+//             "":"个",
+//             "":"开",
+//             "":"来",
+//             "":"唇",
+//             "":"过",
+//             "":"性",
+//             "":"当",
+//             "":"把",
+//             "":"种",
+//             "":"自",
+//             "":"得",
+//             "":"而",
+//             "":"出",
+//             "":"学",
+//             "":"能",
+//             "":"都",
+//             "":"用",
+//             "":"欲",
+//             "":"可",
+//           };
+//           return map[match]
+//         })
       }
-      if(this.nextName.includes('下')){
+        this.nextChapter = mainStore.chapters[mainStore.cindex+1]     
         this.$scrollTo();
-      }
-        
-
     },
     async next(){
       let mainStore = useStore()
@@ -180,7 +179,7 @@ export default {
     getMaxPage(){
       let mainStore = useStore()
       this.maxPage = mainStore.chapters.length - 1
-    }
+    },
   },
   created(){
     this.goRead()
@@ -222,12 +221,19 @@ export default {
   background: #d3d3d1 url('../../public/imgs/nbg/shenhui.png') repeat;
   min-height: 100vh;
 }
+
 .middle-read {
   width: 60vw;
   margin-left: auto;
   margin-right: auto;
   background: #efe3bf url('../../public/imgs/nbg/hui.png') repeat;
   min-height: 100vh;
+}
+
+.middle-read img{
+  display: block;
+  margin: 3vh auto;
+  width: 90%;
 }
 .isNight-read{
   padding-left: 1px;
@@ -247,7 +253,7 @@ export default {
   margin-right: 1vw;
 }
 
-.text-read >div{
+.text-read #acontent{
     text-indent: 2em;
     word-wrap: break-word;
     word-break: break-word;
@@ -258,7 +264,7 @@ export default {
 }
 
 /* 标题 */
-.text-read > h1 {
+#atitle {
     text-align: center;
     padding-bottom: 2vh;
     border-bottom: 1px dotted #9e9e9e;
@@ -290,7 +296,7 @@ export default {
 @media (max-width: 736px) {
   .middle-read{
     width: 100vw;
-    padding: 0 1rem;
+    /* padding: 0 1rem; */
     font-size: 25px;
     line-height: 60px;
   }

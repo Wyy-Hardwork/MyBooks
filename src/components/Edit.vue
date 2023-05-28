@@ -61,6 +61,14 @@
 import request from "../api/request";
 import { useStore } from "@/store/index";
 export default {
+  beforeRouteEnter(to, from, next){
+    let mainStore = useStore()
+    if(mainStore.permiss !== 1){
+         next({name:'login'})
+     }else{
+         next()
+     }
+  },
   data() {
     return {
       tableData:[]
@@ -137,6 +145,7 @@ export default {
   display: inline-block;
   width: calc(100% - 12vw);
   margin-left: 1%;
+  transition-duration: .5s;
 }
 /* table盒子 */
 .table-edit{

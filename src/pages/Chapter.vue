@@ -97,7 +97,7 @@ export default {
     return {
       page: 1, //当前页
       list: [],
-      amount: 3596, //搜索总量
+      amount: 3618, //搜索总量
       input: "",
       isSearch: false,
       isAmount: false, //已经查询过页数，无需重复
@@ -108,7 +108,7 @@ export default {
       let mainStore = useStore();
       mainStore.search = "";
       this.isSearch = false;
-      this.amount = 3596;
+      this.amount = 3618;
       let result = await request.post(`/base/novel/0`, { page: this.page });
       for (const key of result.data) {
         key.img = `./imgs/novel/${key.img}.jpg`;

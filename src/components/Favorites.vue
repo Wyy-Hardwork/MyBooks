@@ -129,6 +129,7 @@ mounted(){
   display: inline-block;
   width: calc(100% - 13vw);
   margin-left: 1%;
+  transition-duration: .5s;
 }
 /* 每个盒子的样式 */
 .bg-fa {

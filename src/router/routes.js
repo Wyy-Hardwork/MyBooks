@@ -4,7 +4,7 @@ export default
 [   
     {
         path:'/',
-        redirect:'/echart'
+        redirect:'/books'
     },
     {
         path:'/admin',
@@ -13,7 +13,7 @@ export default
         {
             path:'/edit',
             name:'edit',
-            component:()=>import('../components/Edit.vue')
+            component:()=>import('../components/Edit.vue'),
         },
         {
             path:'/favorites',
@@ -27,9 +27,9 @@ export default
         component:()=>import('../pages/List.vue')        
     },
     {
-        path:'/echart',
-        name:'echart',
-        component:()=>import('../pages/Echart.vue')          
+        path:'/fall',
+        name:'fall',
+        component:()=>import('../pages/Fall.vue')        
     },
     {
         path:'/read',
@@ -55,6 +55,11 @@ export default
         path:'/books',
         name:'books',
         component:()=>import('../pages/Books.vue')
+    },
+    {
+        path:'/hpic',
+        name:'hpic',
+        component:()=>import('../pages/Hpic.vue')
     },
     {
         path:'/chapter',

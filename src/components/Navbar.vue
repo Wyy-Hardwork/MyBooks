@@ -12,10 +12,10 @@
             active-text-color="#dfcdbd"
             router
           >
-            <el-menu-item index="echart" >数据可视化</el-menu-item>
-            <el-menu-item index="books" >图书主页</el-menu-item>
-            <el-menu-item index="list" >书籍浏览</el-menu-item>
-            <el-menu-item index="chapter" >在线阅读</el-menu-item>
+            <el-menu-item index="books" >主页</el-menu-item>
+            <el-menu-item index="list" >书城</el-menu-item>
+            <el-menu-item index="chapter" >轻小说</el-menu-item>
+            <el-menu-item index="fall">Online · <span class="font-nav">{{ number }}</span></el-menu-item>
           </el-menu>
 
   <div class="right-navbar">
@@ -49,7 +49,7 @@
         <el-input
           placeholder="输入书籍名称搜索"
           v-model="input"
-          @keyup.enter.native="search()"
+          @keyup.enter.native="debounce()"
         >
           <el-button
             slot="append"
@@ -69,12 +69,14 @@
 <script>
 import { useStore } from "@/store/index";
 import request from '@/api/request';
+import {io} from 'socket.io-client'
 export default {
   data() {
     return {
       input: "",
       activeIndex: this.$route.name,
       timer:null,
+      number:0
     };
   },
   methods: {
@@ -94,6 +96,10 @@ export default {
       }else if(this.$route.name == 'chapter'){
         this.novelSearch()
         this.$scrollTo();
+      }else if(this.$route.name == 'hpic' || this.$route.name == 'ndetail' || this.$route.name == 'read'){
+        this.novelSearch()
+        this.$router.push("/chapter");
+        this.$scrollTo();
       }
       else{
         this.$router.push("/search");
@@ -110,6 +116,7 @@ export default {
     let mainStore = useStore()
     mainStore.id = item
     mainStore.uid = item
+    mainStore.permiss = 0
     this.isLogin(false) 
     },
     async editSearch(){
@@ -129,8 +136,14 @@ export default {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.search()
-      }, 300);
+      }, 200);
     }
+  },
+  mounted(){
+    const socket = io('http://47.94.80.85:4000')
+    socket.on('count',(data)=>{
+      this.number = data
+    })
   },
   watch: {
     $route(to) {
@@ -326,6 +339,12 @@ export default {
 }
 .el-input-group__append:hover {
   color: rgb(84, 92, 100);
+}
+/* 在线人数字体 */
+.font-nav{
+  color: rgb(223, 205, 189);
+  text-shadow: 3px 3px 5px rgba(226, 204, 204, 0.25); /* 添加淡淡的阴影效果 */
+  font-size: 17px;
 }
 
 </style>

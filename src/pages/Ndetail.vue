@@ -150,9 +150,15 @@ export default {
             this.catalog[chapter] = new Array()
           }else{
             let url = name.find('.col-4 a').attr('href')
+            url = url.replace('/linovelib','')
             let names = name.find('.col-4 a').text()
             let list = {url,names}
+            try{
             this.catalog[chapter][cindex] = list
+            }catch(err){
+            // this.catalog[0][cindex] = list
+            console.log(err);
+            }
             cindex++
           }
         }

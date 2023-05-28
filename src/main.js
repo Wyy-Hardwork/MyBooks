@@ -7,6 +7,8 @@ import { router } from './router'
 import Lazyload from 'vue-lazyload'
 import { PiniaVuePlugin, createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persistedstate'
+import {VueMasonryPlugin} from 'vue-masonry';
+
 
 //e-ui部分
 import {
@@ -61,6 +63,9 @@ Vue.use(Backtop);
 Vue.prototype.$message = Message
 
 Vue.use(PiniaVuePlugin)
+
+Vue.use(VueMasonryPlugin)
+
 
 const pinia = createPinia()
 

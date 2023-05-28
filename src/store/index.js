@@ -19,6 +19,7 @@ export const useStore = defineStore('MyFirstPinia',{
             chapters:[],
             cindex:number,
             cname:'',
+            permiss:0,
         }
     },
     persist:true,//持久化插件对数据进行localStorage缓存

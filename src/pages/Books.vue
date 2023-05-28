@@ -60,8 +60,14 @@
       </el-tabs>
 
       <el-divider><i class="el-icon-notebook-2"></i></el-divider>
+
+
+      
+
+
+      <div style="margin-top:4%">
       <span style="font-size: 25px; color: #4c4c4c" class="el-icon-s-management"
-        >随机推荐</span
+        >书城图书</span
       >
       <el-button
         class="c1-books"
@@ -96,18 +102,21 @@
           </li>
         </ul>
       </div>
+    </div>
 
-      <div
+
+
+    <div
         style="
           font-size: 25px;
           color: #4c4c4c;
-          margin-top: 2%;
           display: inline-block;
           vertical-align: top;
+          margin-top: 2%;
         "
         class="el-icon-reading"
       >
-        在线阅读
+        轻小说
       </div>
       <div
         class="el-icon-medal-1"
@@ -121,7 +130,7 @@
           margin-left: 300px;
         "
       >
-        新书榜
+        推荐
       </div>
       <div class="read-books">
         <div v-for="(item, index) in list1" :key="index" class="r1-books">
@@ -367,7 +376,15 @@ export default {
 
     async goNovel(item) {
       let mainstore = useStore();
-      mainstore.novelUrl = item.end || item;
+      if(item.end){
+        item.end = item.end.replace('/linovelib','')
+        mainstore.novelUrl = item.end
+      }else{
+        item = item.replace('/linovelib','')
+        mainstore.novelUrl = item
+      }
+      
+       
     },
 
     async novel() {

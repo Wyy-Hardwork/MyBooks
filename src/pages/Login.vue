@@ -98,6 +98,10 @@ export default {
     },
     methods: {
     async login(){
+      if (this.account == '' || this.password == '') {
+        this.$message.error('账号或者密码不能为空')
+        return
+      }
       let result = await request.post(`/base/login`,{
         account:this.account,
         password:this.password    
@@ -107,6 +111,7 @@ export default {
         let mainStore = useStore()
         mainStore.id = result.data[0]
         mainStore.uid = result.data[1]
+        mainStore.permiss = result.data[2]
         this.$message.success('登录成功')
         this.$router.push('/favorites')
       }
@@ -119,6 +124,10 @@ export default {
       },
 
     async register(){
+      if (this.account == '' || this.password == '') {
+        this.$message.error('账号或者密码不能为空')
+        return
+      }
       if(this.password !== this.password1){
         this.$message.error('两次输入密码不一致,请重新输入')
       }else{

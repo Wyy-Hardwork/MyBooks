@@ -71,7 +71,7 @@ export default {
 
 .left-ad{
   transition-duration: .5s;
-  width: 180px;
+  width: 8vw;
   display: inline-block;
   height: 100%;
   background: #545c64;
@@ -79,7 +79,7 @@ export default {
 
 .menu {
   font-size: 18px;
-  width: 180px;
+  width: 8vw;
   min-height: 100%;
   cursor: pointer;
   overflow: hidden;
@@ -116,11 +116,11 @@ export default {
 @media (max-width: 736px) {
 .left-ad{
 min-width: 84px;
-width: 10vw;
+width: 8vw;
 }
 .menu {
 min-width: 84px;
-width: 10vw;
+width: 8vw;
 }
 .menu-item-ad{
   height: 50px;
